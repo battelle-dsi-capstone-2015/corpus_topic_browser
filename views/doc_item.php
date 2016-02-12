@@ -30,7 +30,20 @@
 </div>
 
 <div class="col-md-3">
+	<h2>Topic Entropy</h2>
+	<p>This topic entropy for this document.</p>
+	<?php
+		$max = $entropy['max'];
+		$h = round($entropy['this'],2);
+		$w = round($entropy['this']/$max,2) * 100;
+        print("<div class='progress'>");
+        print("<div class='progress-bar progress-bar-info' role='progressbar' aria-valuenow='{$h}' aria-valuemin='0' aria-valuemax='{$max}' style='width: {$w}%'>");
+        print($h);
+        print("</div>");
+        print("</div>");
+	?>
     <h2>Related Topics</h2>
+    <p>The topic mixture of this document.</p>
     <?php
     foreach($topics as $topic) {
     	$w = round($topic['topic_weight'],2) * 100;
@@ -47,6 +60,7 @@
         print("</div>");
     }
     ?>
+    <!--
     <h2>Topic Entropy</h2>
     <table class="data-box">
     	<tr>
@@ -66,6 +80,7 @@
     		<td><?php print($entropy['min']); ?></td>
     	</tr>
     </table>
+    -->
 </div>
 
 <div class="col-md-4">

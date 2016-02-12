@@ -24,6 +24,7 @@ class Doc extends CI_Controller {
 		$this->output->cache(self::CACHE);
 		$topic_ids = explode('-',$topic_ids_str);
 		$data['docs'] = $this->doc->get_list_by_topic($topic_ids);
+		$data['entropy'] = $this->doc->get_topic_entropy_stats();
 		$topics = array();
 		foreach($topic_ids as $topic_id) {
 			$topics[] = $this->topic->get_item($topic_id);
@@ -39,6 +40,7 @@ class Doc extends CI_Controller {
 	{
 		$this->output->cache(self::CACHE);
 		$data['docs'] = $this->doc->get_list_by_entropy($hmin,$hmax);
+		$data['entropy'] = $this->doc->get_topic_entropy_stats();
 		$title_extra = " >= $hmin";
 		if ($hmax) {
 			$title_extra .= " and < $hmax";

@@ -120,10 +120,21 @@ class Doc_model extends CI_Model {
 		return $q->result_array();
 	}
 	
-	function get_topic_entropy($doc_id)
+	function get_topic_entropy_stats()
 	{
 		$entropy = array();
-		
+		$q1 = $this->db->query("SELECT max(topic_entropy) as 'max_h', min(topic_entropy) as 'min_h', avg(topic_entropy) as 'avg_h' FROM doctopic");
+		$r1 = $q1->row_array();
+		$entropy['max'] = $r1['max_h'];
+		$entropy['min'] = $r1['min_h'];
+		$entropy['avg'] = $r1['avg_h'];
+		return $entropy;
+	}
+	
+	function get_topic_entropy($doc_id)
+	{
+	 	$entropy = array();
+	
 		$q1 = $this->db->query("SELECT max(topic_entropy) as 'max_h', min(topic_entropy) as 'min_h', avg(topic_entropy) as 'avg_h' FROM doctopic");
 		$r1 = $q1->row_array();
 		$entropy['max'] = $r1['max_h'];

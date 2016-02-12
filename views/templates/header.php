@@ -62,7 +62,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#">MVP1</a>
+	      <a class="navbar-brand" href="#"><b>CTB</b></a>
 	    </div>
 	
 	    <!-- Collect the nav links, forms, and other content for toggling -->

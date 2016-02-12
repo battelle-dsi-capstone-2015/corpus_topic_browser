@@ -2,10 +2,12 @@
 	<h1><?php print($page_title); ?></h1>
 </div>
 
-<?php if ($topics) {
+<?php if (isset($topics)) {
+	print("<div class='well'>");
 	foreach($topics as $topic) {
-		print("<div class='well'>{$topic['topic_id']}: {$topic['topic_words']}</div>");
+		print("<div>{$topic['topic_id']}: {$topic['topic_words']}</div>");
 	}	
+	print("</div>");
 }
 ?>
 	
@@ -24,8 +26,16 @@
 		foreach($docs as $doc) {
 			$doc_url = base_url('doc/item/'.$doc['doc_id']);
 			$h = round($doc['topic_entropy'],2);
+			$w = round($doc['topic_entropy'] / $entropy['max'],2) * 100;
 			print("<tr>");
-			print("<td>$h</td>");
+			print("<td>");
+			print("<div class='progress'>");
+        	print("<div class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='{$h}' aria-valuemin='0' aria-valuemax='{$entropy['max']}' style='width: {$w}%'>");
+        	print($h);
+        	print("</div>");
+       	 	print("</div>");
+			print("</td>");
+			#print("<td>$h</td>");
 			print("<td>{$doc['year']}</td>");
 			print("<td><a href='$doc_url'>{$doc['title']}</a></td>");
 			print("</tr>");	

@@ -19,7 +19,7 @@ class Topic extends CI_Controller {
 		
 		
 		// Put all this somewhere else ... in the model
-		$bins = 25; // Pass as param
+		$bins = 30; // Pass this as a param
 		$q = $this->db->query("SELECT max(topic_entropy) as 'max', min(topic_entropy) as 'min', avg(topic_entropy) as 'avg' FROM doctopic");
 	    $h = $q->row_array(); 
 	    $span = $h['max'] - $h['min']; 
@@ -66,11 +66,5 @@ class Topic extends CI_Controller {
 		$this->load->view('topic_item', $data);	
 	    $this->load->view('templates/footer.php', $data);
     }
-	 	
-	
-	public function one($topic_id = NULL)
-	{
-	    $this->item();
-	}
-  
+	 	  
 }
