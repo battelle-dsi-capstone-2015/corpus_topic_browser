@@ -30,39 +30,33 @@
         print($word['word_count']);
         print("</div>");
         print("</div>");
-		#print("<div class='data-bar' style='width:{$w}%;'><small>{$word['word_count']}</small></div>");
         print("</div>");
     }
     ?>
 </div>
 
 <div class="col-md-6">
+	<?php $doc_url = base_url('doc/by_topic/'.$topic_id); ?>
     <h2>Related Documents</h2>
-    <div><p>
-    	This list shows the top 25 documents which contain the highest concentrations of this topic. The data 
-    	bars show the percentage of this topic's concentration in each document.
-    </p></div>
+    <div>
+        <p>This list shows the <b>top 25 documents</b> which contain the highest concentrations of this topic. The data 
+    	bars show the percentage of this topic's concentration in each document. Overall, there are <b><a href="<?php print($doc_url);?>"><?php print($doc_count); ?> 
+    	documents</a></b> for which this topic accounts for <b>at least 10%</b> of its words.</p>
+    </div>
     <?php
-    $n = 0; 
     foreach($docs as $doc_id => $doc) {
-        $n++;
         $doc_url = base_url('doc/item/'.$doc_id);
 		$w = round($doc['topic_weight'],2) * 100;	
-		#$button = "<button type='button' class='btn btn-link btn-xs' data-toggle='collapse' data-target='#doc-$doc_id'>&#x25BC;</button>"; 
         print("<div class='data-item'>");
         print("<div class='progress'>");
         print("<div class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='{$w}' aria-valuemin='0' aria-valuemax='100' style='width: {$w}%'>");
         print((round($doc['topic_weight'],2) * 100) . '%');
         print("</div>");
         print("</div>");
-        #print("<span class='label label-default'>$n</span> ");
-        #print("<div class='data-bar' style='margin-top:.5em; width:{$w}%;'><small>$n: {$w}%</small></div>");
         print("<h4><a href='$doc_url'>".$doc['title']."</a></h4>");
         print("<div><p><b>".$doc['year']."</b> | ". $doc['authors']."</p></div>");
         print("<div id='doc-$doc_id' class='_collapse'><p>".$doc['abstract'].'</p></div>');
-        #print("<div class='_label _label-primary'>Document $doc_id</div> ");
         print("<span class=''><a href='http://google.com/search?q={$doc['doi']}' target='_blank'>DOI:{$doc['doi']}</a></span> ");
-        #print("<span class='label label-primary'> ".$doc["topic_weight"]."</span>");
         print("</div>");				
     }
     ?>

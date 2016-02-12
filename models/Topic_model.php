@@ -17,7 +17,7 @@ class Topic_model extends CI_Model {
 	
 	function get_item($topic_id)
 	{
-		$q = $this->db->query("SELECT topic_alpha,total_tokens,topic_words FROM topic WHERE topic_id = ?",array($topic_id));
+		$q = $this->db->query("SELECT topic_id,topic_alpha,total_tokens,topic_words FROM topic WHERE topic_id = ?",array($topic_id));
 		return $q->row_array();
 	}
 	
@@ -32,6 +32,13 @@ class Topic_model extends CI_Model {
 	{
 		$q = $this->db->query("SELECT topic_phrase, phrase_count, phrase_weight FROM topicphrase WHERE topic_id = ?",array($topic_id));
 		return $q->result_array();
+	}
+	
+	function get_doc_count_for_topic($topic_id,$threshold = 0.1)
+	{
+	    $q = $this->db->query("SELECT count(*) as 'n' FROM doctopic_long WHERE topic_id = ? AND topic_weight >= ?", array($topic_id,$threshold));
+	    $r = $q->row_array();
+	    return $r['n'];
 	}
 	
 	function get_docs($topic_id,$limit=25)

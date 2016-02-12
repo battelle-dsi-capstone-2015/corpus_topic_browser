@@ -20,10 +20,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     
     <!-- Datatables -->
-    <!--
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
     <script src="http://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-    -->
+
     <!-- Chart JS -->
     <!--
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
@@ -34,7 +33,9 @@
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     -->
     <!-- D3 -->
+    <!--
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    -->
     
     <!--
     <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
@@ -67,7 +68,7 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
-	        <li><a href="<?php echo base_url('topic/all'); ?>">Topic Browser <span class="sr-only">(current)</span></a></li>
+	        <li><a href="<?php echo base_url('topic/all'); ?>">Topics<span class="sr-only">(current)</span></a></li>
 	        <li><a href="<?php echo base_url('data'); ?>">API</a></li>
 	        <li><a href="/phpliteadmin.php" target="_blank">DB Browser</a></li>
 	        <!--

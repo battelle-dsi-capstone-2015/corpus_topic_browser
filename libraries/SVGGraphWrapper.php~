@@ -1,0 +1,31 @@
+<?php 
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+#require_once('SVGGraph/SVGGraph.php');
+
+class SGraph {
+
+  public graphs = array();
+
+  /*
+  public function __construct($p)
+  {
+    
+  }
+  */
+
+  function init($name, $params) 
+  {
+    $p = $params;
+    $this->graphs[$name] = new SVGGraph($p['h'],$p['w']);
+    $this->graphs[$name]->Values($p['v']);
+    $this->graphs[$name] = $graph->Fetch($p['t']);
+  }
+
+  function show($name = 'default')
+  {
+    print($this->graphs[$name]);
+  }
+
+}

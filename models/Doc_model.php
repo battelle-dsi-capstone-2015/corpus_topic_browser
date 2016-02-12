@@ -25,10 +25,26 @@ class Doc_model extends CI_Model {
 		$topic_where = array();
 		foreach ($topic_ids as $topic_id) { $topic_where[] = "t{$topic_id} >= 0.1"; }
 		$topic_where_str = implode(' AND ', $topic_where);
-		$q2 = $this->db->query("SELECT doc_id, title, year, authors, abstract, doi, cite_count FROM src_all_doi 
-			WHERE doc_id IN (SELECT doc_id FROM doctopic WHERE $topic_where_str)");
+		$q2 = $this->db->query("SELECT d.topic_entropy, s.doc_id, title, year, authors, abstract, doi, cite_count FROM src_all_doi s
+			JOIN doctopic d USING(doc_id) 
+			WHERE s.doc_id IN (SELECT doc_id FROM doctopic WHERE $topic_where_str)
+			ORDER BY d.topic_entropy");
 		return $q2->result_array();		
 	}
+	
+	function get_list_by_entropy($hmin, $hmax = NULL)
+	{
+		$topic_where_str = "topic_entropy >= $hmin";
+		if ($hmax) {
+			$topic_where_str .= " AND topic_entropy < $hmax";
+		}
+		$q2 = $this->db->query("SELECT d.topic_entropy, s.doc_id, title, year, authors, abstract, doi, cite_count FROM src_all_doi s
+			JOIN doctopic d USING(doc_id) 
+			WHERE s.doc_id IN (SELECT doc_id FROM doctopic WHERE $topic_where_str)
+			ORDER BY d.topic_entropy");
+		return $q2->result_array();		
+	}
+	
 	
 	function get_topics($doc_id, $limit = 10)
 	{
