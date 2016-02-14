@@ -25,6 +25,7 @@ class Word extends CI_Controller {
 		#$data['words'] = $this->word->get_words($word_str);
 		$data['docs'] = $this->word->get_docs($word_str);
 		$data['max_words'] = $this->word->get_max_words();
+		$data['max_docwords'] = $this->word->get_max_docwords();
 		$this->load->view('templates/header.php', $data);
 		$this->load->view('word_item', $data);	
 	    $this->load->view('templates/footer.php', $data);

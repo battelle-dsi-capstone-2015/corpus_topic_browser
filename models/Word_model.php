@@ -42,17 +42,31 @@ class Word_model extends CI_Model {
     	}
     	return $topics;
 	}
+	
+	function get_max_docwords()
+	{
+		$q = $this->db->query("SELECT MAX(word_count) as 'n' FROM docword");
+		$r = $q->row_array();
+		return $r['n'];
+	}
 
-	function get_docs($word_str, $limit = 25)
+	function get_docs($word_str, $limit = 50)
 	{
 		$docs = array();
-		$q = $this->db->query("SELECT doc_id, title, authors, year FROM src_all_doi WHERE doc_id IN (SELECT doc_id FROM docword WHERE word_str = ? ORDER BY word_count DESC LIMIT $limit)", $word_str);
+		$q = $this->db->query("
+			SELECT s.doc_id, s.title, s.authors, s.year, dw.word_count
+			FROM src_all_doi s JOIN docword dw USING(doc_id) 
+			WHERE dw.word_str = ?
+			ORDER BY dw.word_count DESC 
+		 	LIMIT $limit", 
+			$word_str);
 		foreach ($q->result_array() as $r) {
 			$docs[] = array(
-				'doc_id' 	=> $r['doc_id'],
-				'title' 	=> $r['title'],
-				'authors' 	=> $r['authors'],
-				'year' 		=> $r['year']
+				'doc_id' 	 => $r['doc_id'],
+				'title' 	 => $r['title'],
+				'authors' 	 => $r['authors'],
+				'year' 		 => $r['year'],
+				'word_count' => $r['word_count'],
 			);
 		} 
 		return $docs;

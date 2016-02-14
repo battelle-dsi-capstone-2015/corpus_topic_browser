@@ -12,11 +12,11 @@ class Topic extends CI_Controller {
     public function all() 
     {
     	$this->output->cache(self::CACHE);
+		
 		$data['topics'] = $this->topic->get_list();
 		$data['page_title'] = 'All Topics';
 		$data['topic_entropy'] = $this->topic->get_topic_entropy();
 		$data['alpha_stats'] = $this->topic->get_alpha_stats();
-		
 		
 		// Put all this somewhere else ... in the model
 		$bins = 30; // Pass this as a param
@@ -57,7 +57,8 @@ class Topic extends CI_Controller {
 		$data['page_title'] = "Topic $topic_id";
 		$data['topic_id'] = $topic_id;
 		$data['topic_info'] = $this->topic->get_item($topic_id);
-		$data['words'] = $this->topic->get_words($topic_id);
+		$data['words'] = $this->topic->get_words($topic_id)	;
+		$data['max_words'] = $this->topic->get_max_words();
 		$data['phrases'] = $this->topic->get_phrases($topic_id);
 		$data['doc_count'] = $this->topic->get_doc_count_for_topic($topic_id);
 		$data['docs'] = $this->topic->get_docs($topic_id);

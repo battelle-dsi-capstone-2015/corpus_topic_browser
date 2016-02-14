@@ -21,6 +21,13 @@ class Topic_model extends CI_Model {
 		return $q->row_array();
 	}
 	
+	function get_max_words()
+	{
+		$q = $this->db->query("SELECT MAX(word_count) as 'n' FROM topicword_long");
+		$r = $q->row_array();
+		return $r['n'];
+	}
+	
 	function get_words($topic_id,$limit=25)
 	{
 		#$q = $this->db->query("SELECT word_id, word_str, t{$topic_id} FROM topicword ORDER BY t{$topic_id} DESC LIMIT $limit");

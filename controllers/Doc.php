@@ -53,12 +53,12 @@ class Doc extends CI_Controller {
 
 	public function item($doc_id = NULL)
 	{
-		$this->output->cache(self::CACHE);
+		#$this->output->cache(self::CACHE);
 		$data['doc_id'] = $doc_id;
 		$data['doc'] = $this->doc->get_item($doc_id);
 		$data['page_title'] = "Doc $doc_id";
-		#$data['topic_distro'] = $this->doc->get_topic_distro($doc_id);
-		#$data['words'] = $this->doc->get_words($doc_id);
+		$data['words'] = $this->doc->get_words($doc_id,10);
+		$data['max_words'] = $this->doc->get_max_words();
 		$data['docs'] = $this->doc->get_docs($doc_id);
 		$data['topics'] = $this->doc->get_topics($doc_id);
 		$data['entropy'] = $this->doc->get_topic_entropy($doc_id);

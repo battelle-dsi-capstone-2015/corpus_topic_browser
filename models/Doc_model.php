@@ -67,7 +67,8 @@ class Doc_model extends CI_Model {
 	function get_docs($doc_id,$limit=10)
 	{
 		$docs = array();
-		$q1 = $this->db->query("SELECT d.doc_id, s.title, s.authors, s.year 
+		$q1 = $this->db->query("
+			SELECT d.doc_id, s.title, s.authors, s.year, d.topic_weight, d.topic_id
 			FROM doctopic_long d JOIN src_all_doi s USING(doc_id) 
 			WHERE d.doc_id != ? AND topic_weight >= 0.1 AND topic_id 
 			IN (
@@ -77,12 +78,15 @@ class Doc_model extends CI_Model {
 				ORDER BY topic_weight DESC limit 1) 
 			ORDER BY topic_weight DESC 
 			LIMIT $limit", array($doc_id,$doc_id));
-		foreach ($q1->result_array() as $r) {
+		foreach ($q1->result_array() as $r) 
+		{
 			$docs[] = array(
-				'doc_id' 	=> $r['doc_id'],
-				'title' 	=> $r['title'],
-				'authors' 	=> $r['authors'],
-				'year' 		=> $r['year']
+				'doc_id' 		=> $r['doc_id'],
+				'title' 		=> $r['title'],
+				'authors' 		=> $r['authors'],
+				'year' 			=> $r['year'],
+				'topic_weight'  => $r['topic_weight'],
+				'topic_id'		=> $r['topic_id']
 			);			
 		}
 		/*
@@ -107,11 +111,6 @@ class Doc_model extends CI_Model {
 		}
 		*/
 	    return $docs;
-	}
-
-	function get_words($doc_id)
-	{
-	    return "WORDS";
 	}
 	
 	function get_topic_distro($doc_id)
@@ -151,6 +150,20 @@ class Doc_model extends CI_Model {
 		$entropy['this'] = $r2['topic_entropy'];
 		
 		return $entropy;
+	}
+	
+	function get_words($doc_id, $limit=25)
+	{
+		
+		$q = $this->db->query("SELECT doc_id, word_id, word_str, word_count FROM docword WHERE doc_id = ? ORDER BY word_count DESC limit $limit",$doc_id);
+		return $q->result_array();
+	}
+	
+	function get_max_words()
+	{
+		$q = $this->db->query("SELECT MAX(word_count) as 'n' FROM docword");
+		$r = $q->row_array();
+		return $r['n'];
 	}
     
 }
