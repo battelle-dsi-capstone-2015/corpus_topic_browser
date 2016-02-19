@@ -109,9 +109,33 @@ class Topic_model extends CI_Model {
  
  	function get_alpha_stats()
 	{
-		$q = $this->db->query("SELECT max(topic_alpha) as 'max', min(topic_alpha) as 'min', avg(topic_alpha) as 'avg' FROM topic");
-		return $q->row_array();
+	  $q = $this->db->query("SELECT max(topic_alpha) as 'max', min(topic_alpha) as 'min', avg(topic_alpha) as 'avg' FROM topic");
+	  return $q->row_array();
 	}
 	
+	function get_common_docs($topic_id_x,$topic_id_y,$min = 0.1)
+	{
+	  $sql = "SELECT d.title as title, a.doc_id as doc_id, (a.topic_weight * b.topic_weight) AS combo_weight
+  		FROM doctopic_long a
+       		JOIN doctopic_long b USING (doc_id)
+       		JOIN src_all_doi d ON (d.doc_id = a.doc_id)
+ 		WHERE (a.topic_id = ? AND b.topic_id = ?) AND (a.topic_weight >= $min AND b.topic_weight >= $min) 
+ 		ORDER BY combo_weight DESC
+ 		LIMIT 25";
+	  $q = $this->db->query($sql,array($topic_id_x,$topic_id_y));
+	  return $q->result_array();
+	}
+
+	function get_common_words($topic_id_x,$topic_id_y) 
+	{
+	  $sql = "SELECT a.word_str as word_str, 
+		a.word_count as word_count_x, b.word_count as word_count_y, 
+		(a.word_count + b.word_count - abs(a.word_count - b.word_count)) as intersection
+		FROM topicword_long a JOIN topicword_long b USING (word_id)
+		WHERE a.topic_id = ? and b.topic_id = ?
+		ORDER BY intersection DESC";
+	  $q = $this->db->query($sql,array($topic_id_x,$topic_id_y));
+	  return $q->result_array();
+	}
     
 }

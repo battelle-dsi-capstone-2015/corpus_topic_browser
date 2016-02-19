@@ -9,8 +9,13 @@ class Word extends CI_Controller {
         
     public function all() 
     {
-        $data['words'] = $this->word->get_list();
-        $data['page_title'] = 'All Words';
+        $limit = 1000;
+		$data['limit'] = $limit;
+		$data['words'] = $this->word->get_list($limit);
+        #$data['words_with_topics'] = $this->word->get_list_with_topics($limit);
+		$data['words_in_topics'] = $this->word->get_top_words_in_topics($limit);
+        $data['page_title'] = "Words";
+        $data['max_words'] = $this->word->get_max_words();
         $this->load->view('templates/header.php', $data);
         $this->load->view('word_list', $data);  
         $this->load->view('templates/footer.php', $data);

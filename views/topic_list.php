@@ -11,21 +11,21 @@
 		the document collection itself. Topics with a low &alpha; value are outliers, and may appear in one or two
 		documents.</p></div>
 <?php
-$min = $alpha_stats['min'];
-$max = $alpha_stats['max']; 
+$vmin = $alpha_stats['min'];
+$vmax = $alpha_stats['max']; 
 foreach($topics as $topic) {
-	$w = round(($topic['topic_alpha'] - $min)/($max - $min),2) * 100;
+    $vnow = $topic['topic_alpha'];
 	$topic_url = base_url('topic/item/'.$topic['topic_id']);
 	print("<div class='data-item'>");
-	print("<p style='font-size:110%;'><a href='$topic_url'>" . $topic['topic_words'] . "</a></p>");
-	print progress_bar('success',$topic['topic_alpha'],$min,$max,$w,$topic['topic_alpha']);
+	print("<p style='font-size:110%;'><a href='$topic_url'>" . $topic['topic_words'] . "</a> <span class='text-muted'><small>T-". $topic['topic_id']."</small></span></p>");
+	print progress_bar('success',$vnow,$vmin,$vmax,$vnow);
 	print("</div>");
 }
 ?>	
 </div>
 
 <div class="col-md-6">
-	<h2 style="text-align:center;">Documents by Topic Entropy (H)</h2>
+	<h2>Documents by Topic Entropy (H)</h2>
 	<div>
 		<p>Topic entropy refers to the degree to which topic weights are equally distributed in a document. In 
 			a high entropy document, the weighting of individual topics is less pronounced, tending toward an equiprobable
@@ -33,14 +33,16 @@ foreach($topics as $topic) {
 			entropy may be empty. Documents with very low entropy may have a high thematic specificity.</p>
 	</div>
 	<?php
+	$vmin = 0;
+	$vmax = $nmax;
 	foreach($bars as $bar) {
-		$w = round($bar['n'] / $nmax, 2) * 100;
+	    $vnow = $bar['n'];
 		$h_start = round($bar['h'],2);
 		$h_end = round($bar['m'],2);
 		$doc_url = base_url("doc/by_entropy/$h_start/$h_end");
 		print("<div class='data-item'>");
 		print("<p><a href='$doc_url'>H >= $h_start and < $h_end</a></p>");
-		print progress_bar('info',$bar['n'],0,$max,$w,$bar['n']);
+		print progress_bar('info',$vnow,$vmin,$vmax,$vnow);
 		print("</div>");
 	}
 	?>

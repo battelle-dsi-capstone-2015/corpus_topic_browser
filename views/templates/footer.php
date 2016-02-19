@@ -16,7 +16,8 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.data-table').DataTable();
+	var table = $('.data-table').DataTable();
+ 	table.column( '0:visible' ).order( 'desc' ).draw();
 });
 </script>
 </body>

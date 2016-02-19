@@ -62,13 +62,16 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#"><b>CTB</b></a>
+	      <a class="navbar-brand" href="#"><b></b></a>
 	    </div>
 	
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
+	      	<li><a href='/battelle'>Home</a></li>
 	        <li><a href="<?php echo base_url('topic/all'); ?>">Topics<span class="sr-only">(current)</span></a></li>
+	        <li><a href="<?php echo base_url('doc/all'); ?>">Documents<span class="sr-only">(current)</span></a></li>
+	        <li><a href="<?php echo base_url('word/all'); ?>">Words<span class="sr-only">(current)</span></a></li>
 	        <li><a href="<?php echo base_url('data'); ?>">API</a></li>
 	        <li><a href="/phpliteadmin.php" target="_blank">DB Browser</a></li>
 	        <!--

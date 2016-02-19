@@ -12,8 +12,10 @@ class Doc extends CI_Controller {
     public function all() 
     {
         $this->output->cache(self::CACHE);
-        $data['docs'] = $this->doc->get_list();
-        $data['page_title'] = 'All Documents';
+		$limit = 1000;
+        $data['docs'] = $this->doc->get_list($limit);
+		$data['entropy'] = $this->doc->get_topic_entropy_stats();
+        $data['page_title'] = "First 1000 Documents by Title";
         $this->load->view('templates/header.php', $data);
         $this->load->view('doc_list', $data);   
         $this->load->view('templates/footer.php', $data);
@@ -53,10 +55,10 @@ class Doc extends CI_Controller {
 
     public function item($doc_id = NULL)
     {
-        $this->output->cache(self::CACHE);
+        #$this->output->cache(self::CACHE);
+        $data['page_title'] = "Document $doc_id";
         $data['doc_id'] = $doc_id;
         $data['doc'] = $this->doc->get_item($doc_id);
-        $data['page_title'] = "Doc $doc_id";
         $data['words'] = $this->doc->get_words($doc_id,10);
         $data['max_words'] = $this->doc->get_max_words();
         $data['docs'] = $this->doc->get_docs($doc_id);

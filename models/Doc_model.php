@@ -8,9 +8,9 @@ class Doc_model extends CI_Model {
 		#$this->DB1 = $this->load->database('default', TRUE);
     }
 	
-	function get_list($limit=100) 
+	function get_list($limit=1000) 
 	{
-		$q = $this->db->query("SELECT s.doc_id, s.title, d.topic_entropy FROM src_all_doi s JOIN doctopic d USING (doc_id) LIMIT $limit"); 
+		$q = $this->db->query("SELECT s.doc_id, s.year, s.title, d.topic_entropy FROM src_all_doi s JOIN doctopic d USING (doc_id) ORDER BY s.title LIMIT $limit"); 
 		return $q->result_array();
 	}
 	

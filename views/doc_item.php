@@ -32,23 +32,25 @@
 </div>
 
 <div class="col-md-4">
-  <h2>Topic Entropy</h2>
-  <?php
-     $max = $entropy['max'];
-     $h = round($entropy['this'],2);
-     $w = round($entropy['this']/$max,2) * 100;
-     print progress_bar('info',$h,0,$max,$w,$h);
-     ?>
+    <h2>Topic Entropy</h2>
+    <?php
+    $vmin = 0;
+    $vmax = round($entropy['max'],3);
+    $vnow = round($entropy['this'],3);
+    print progress_bar('info',$vnow,$vmin,$vmax,$vnow);
+    ?>
   <h2>Topic Mixture</h2>
   <?php
+ $vmin = 0;
+ $vmax = 1;
   foreach($topics as $topic) {
-     $w = round($topic['topic_weight'],2) * 100;
+     $vnow = round($topic['topic_weight'],2);
      $topic_url = base_url('topic/item/'.$topic['topic_id']);
      print("<div class='data-item'>");
      print("<a title='{$topic['topic_weight']}' href='$topic_url'>");
      print("<p>".$topic['topic_words']."</p>");
      print("</a>");
-     print progress_bar('success',$w,0,100,$w,"$w%");
+     print progress_bar('success',$vnow,$vmin,$vmax,$vnow);
      print("</div>");
   }
   ?>
@@ -57,37 +59,39 @@
   	<p>The most frequently appearing words in this document.</p>
   </div>
   <?php
-  foreach($words as $word) {
-  	$w = round($word['word_count']/$max_words,2) * 100;
-	$word_url = base_url('word/item/'.$word['word_str']);
-	print("<div class='data-item'>");
-	print("<a href='$word_url'>{$word['word_str']}</a>");
-	print progress_bar('success',$word['word_count']*10,0,$max_words*10,$w,$word['word_count']);
-	print("</div>");
-  }
+    $vmin = 0;
+    $vmax = $max_words;
+      foreach($words as $word) {
+        $vnow = $word['word_count'];
+        $word_url = base_url('word/item/'.$word['word_str']);
+        print("<div class='data-item'>");
+        print("<a href='$word_url'>{$word['word_str']}</a>");
+        print progress_bar('success',$vnow,$vmin,$vmax,$vnow);
+        print("</div>");
+      }
   ?>
      
 </div>
 
 <div class="col-md-4">
-  <h2>Related Documents</h2>
-  <div>
-    <p>These are ten documents that are related to the current
-      document because they share a top topic. These documents,
-      however, may contain that topic in a higher concentration than
-      the current. A better measure of document similarity would
-      compare all topics and their distribution.</p>
-  </div>
-  <?php
-  foreach($docs as $doc) {
-     $doc_url = base_url('doc/item/'.$doc['doc_id']);
-     $w = round($doc['topic_weight'],2) * 100;
-     print("<div class='data-item'>");
-     print("<a href='$doc_url'>");
-     print($doc['title']);
-     print("</a>");
-     print progress_bar('success',$w,0,100,$w,"$w%");
-     print("</div>");
-  }
-  ?>
+    <h2>Related Documents</h2>
+    <div>
+        <p>These are ten documents that are related to the current
+        document because they share a top topic. These documents,
+        however, may contain that topic in a higher concentration than
+        the current. A better measure of document similarity would
+        compare all topics and their distribution.</p>
+    </div>
+    <?php
+    $vmin = 0;
+    $vmax = 1;
+    foreach($docs as $doc) {
+        $vnow = round($doc['topic_weight'],3);    
+        $doc_url = base_url('doc/item/'.$doc['doc_id']);
+        print("<div class='data-item'>");
+        print("<a href='$doc_url'>".$doc['title']."</a>");
+        print progress_bar('success',$vnow,$vmin,$vmax,$vnow);
+        print("</div>");
+    }
+    ?>
 </div>
