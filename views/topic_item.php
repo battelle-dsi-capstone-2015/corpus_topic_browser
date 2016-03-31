@@ -1,21 +1,27 @@
 <div class="page-header">
 	<h1><small>Topic <?php print $topic_id; ?></small>
 		<div><?php print($topic_info['topic_words']); ?></div>
+		<div>
+		<?php
+		$p = array(); 
+		foreach($phrases as $phrase) { $p[] = $phrase['topic_phrase']; }
+		print "<small>" . implode(' | ', $p) . "</small>";
+        ?>
+        </div>
+        </div>
 	</h1>
 </div>
 
-<div id="topic-item-words" class="col-md-2">
-	<h2>Topic Alpha</h2>
+<div id="topic-item-words" class="col-md-4">
+	<h2>Topic Trend</h2>
+	<p>Average topic weight in documents by year</p>
+    <?php 
+    $bg = bar_graph1($graph,$trend,250,350,'YEAR','avg weight',2005,2015);
+	print($bg);
+    ?>
+	<h2>Topic <var>&alpha;</var></h2>
 	<?php print progress_bar('success',$topic_info['topic_alpha'],0,$alpha_stats['max'],$topic_info['topic_alpha']); ?>
 	
-    <h2>Top Phrases</h2>
-    <?php foreach($phrases as $phrase) {
-        print("<p>");
-        print($phrase['topic_phrase']);
-        print("</p>");
-    }
-    ?>
-
     <h2>Top Words</h2>
     <?php
     $vmax = $max_words; // Max words for the whole corpus; may want to change this to for the topic
@@ -31,7 +37,7 @@
     ?>
 </div>
 
-<div class="col-md-6">
+<div class="col-md-4">
 	<?php $doc_url = base_url('doc/by_topic/'.$topic_id); ?>
     <h2>Related Documents</h2>
     <div>
@@ -67,15 +73,17 @@
     	</p>
     </div>
     <?php 
-    $vmin = 0;
-    $vmax = 1;
-    foreach($topics as $topic_id => $topic) {
-        $vnow = round($topic['js_div'],3);
-    	$topic_url = base_url('topic/item/'.$topic_id);
+    $vmin = $js_div_ends['min'];
+    $vmax = $js_div_ends['max'];
+    foreach($topics as $this_topic_id => $topic) {
+        $vnow = $topic['js_div'];
+    	$topic_url = base_url('topic/item/'.$this_topic_id);
+    	$pair_url = base_url("topic/pair/$topic_id/$this_topic_id");
     	print("<div class='data-item'>");
-		print("<a href='$topic_url'>".$topic['topic_words']."</a>");
-		print progress_bar('warning',$vnow,$vmin,$vmax,$vnow);
-		print("</div>");
+	print("<a class='label label-default' href='$pair_url'>compare</a> ");
+	print("<a href='$topic_url'>".$topic['topic_words']."</a> ");
+	print progress_bar('warning',$vnow,$vmin,$vmax,round($vnow,3));
+	print("</div>");
     }
 	?>
 </div>

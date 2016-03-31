@@ -93,9 +93,9 @@ class Topic_model extends CI_Model {
 	function get_topic_cols()
 	{
 		$tcols = array();
-		$query = $this->db->query("SELECT num_topics FROM config LIMIT 1");
+		$query = $this->db->query("SELECT value as 'num_topics' FROM config WHERE key = 'num_topics'");
 		$r = $query->row();
-		for ($i = 0; $i < $r->num_rows; $i++) {
+		for ($i = 0; $i < $r->num_topics; $i++) {
 			$tcols[] = "t$i";
 		}
 		return $tcols;
@@ -137,5 +137,61 @@ class Topic_model extends CI_Model {
 	  $q = $this->db->query($sql,array($topic_id_x,$topic_id_y));
 	  return $q->result_array();
 	}
+	
+	function get_js_div_ends()
+	{
+		$q = $this->db->query("SELECT MAX(js_div) as 'max', MIN(js_div) as 'min' FROM topicpair");
+		return $q->row_array();
+	}
     
+	function get_js_div($topic_id_x, $topic_id_y)
+	{
+		$topic_id_x < $topic_id_y ? $vars = array($topic_id_x,$topic_id_y) : $vars = array($topic_id_y,$topic_id_x);
+		$q = $this->db->query("SELECT js_div FROM topicpair WHERE topic_id1 = ? AND topic_id2 = ?", $vars);
+		$r = $q->row_array();
+		return $r['js_div'];
+	}
+	
+	function get_topic_trend($topic_id)
+	{
+		$trend = array();
+		$q = $this->db->query("SELECT doc_label as 'year', AVG(t{$topic_id}) as 'weight' FROM doctopic GROUP BY year ORDER BY year");
+		$rs = $q->result_array();
+		foreach ($rs as $r)
+		{
+			if (!array_key_exists($r['year'],$trend)) 
+			{
+				$trend[$r['year']] = $r['weight'];
+			}
+			else
+			{
+				$trend[$r['year']] += $r['weight'];
+			}
+		}
+		return $trend;
+	}
+	
+	function get_topic_trends()
+	{
+		$trends = array();
+		$tcols = $this->get_topic_cols();
+		$where = array();
+		foreach($tcols as $col)
+		{
+			$where[] = "AVG($col) as '{$col}_weight'";
+		}
+		$where_str = implode(", ", $where);
+		$sql = "SELECT doc_label as 'year', $where_str FROM doctopic GROUP BY year ORDER BY year";
+		$q = $this->db->query($sql);
+		$rs = $q->result_array();
+		foreach ($rs as $r)
+		{
+			foreach($tcols as $col)
+			{
+				$trends[$col][$r['year']] = $r["{$col}_weight"];
+			}
+		}
+		return $trends;
+	}	
+	
 }

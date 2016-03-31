@@ -13,6 +13,7 @@
 
 	<!-- JQUERY -->
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0-rc.1/jquery-ui.min.js"></script>
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -22,6 +23,10 @@
     <!-- Datatables -->
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
     <script src="http://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+    
+    <!-- Vis -->
+    <link rel="stylesheet" href="<?php print base_url('assets/js/vis/vis.css'); ?>">
+    <script src="<?php print base_url('assets/js/vis/vis.min.js'); ?>"></script>
 
     <!-- Chart JS -->
     <!--

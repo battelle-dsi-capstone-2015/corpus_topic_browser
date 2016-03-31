@@ -61,7 +61,9 @@ class Doc extends CI_Controller {
         $data['doc'] = $this->doc->get_item($doc_id);
         $data['words'] = $this->doc->get_words($doc_id,10);
         $data['max_words'] = $this->doc->get_max_words();
-        $data['docs'] = $this->doc->get_docs($doc_id);
+        #$data['docs'] = $this->doc->get_docs($doc_id);
+		$data['related_docs'] = $this->doc->get_related_docs($doc_id);
+		$data['avg_distance'] = $this->doc->get_avg_distance();
         $data['topics'] = $this->doc->get_topics($doc_id);
         $data['entropy'] = $this->doc->get_topic_entropy($doc_id);
         $this->load->view('templates/header.php', $data);

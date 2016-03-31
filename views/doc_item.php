@@ -33,6 +33,13 @@
 
 <div class="col-md-4">
     <h2>Topic Entropy</h2>
+    <div>
+    	<p>This entropy of the document reflects the mixture of the topics it contains. A
+    		very low entropy document will contain one topic in a high concentration; a high
+    		entropy document will contain many topics. This measure may indicate how focused a 
+    		document is, or how many ideas are being combined within it. A very high entropy 
+    		document is frequently very small or even empty.</p>
+    </div>
     <?php
     $vmin = 0;
     $vmax = round($entropy['max'],3);
@@ -70,27 +77,28 @@
         print("</div>");
       }
   ?>
-     
 </div>
 
 <div class="col-md-4">
-    <h2>Related Documents</h2>
+    <h2>Nearest Documents</h2>
     <div>
-        <p>These are ten documents that are related to the current
-        document because they share a top topic. These documents,
-        however, may contain that topic in a higher concentration than
-        the current. A better measure of document similarity would
-        compare all topics and their distribution.</p>
+        <p>These are documents are similar to the current
+        document by virtue of their distribution over topics.
+        This similarity is calculated as the Helinger Distance, 
+        which is roughly proportional to the Jensen-Shannon Divergence,
+        but much less expensive to compute. Note that the average 
+        distance between documents in this corpus is 
+        <b><?php print round($avg_distance,3); ?></b>.</p>
     </div>
     <?php
     $vmin = 0;
     $vmax = 1;
-    foreach($docs as $doc) {
-        $vnow = round($doc['topic_weight'],3);    
-        $doc_url = base_url('doc/item/'.$doc['doc_id']);
+    foreach($related_docs as $doc) {
+        $vnow = round($doc['distance'],3);    
+        $doc_url = base_url('doc/item/'.$doc['doc_id_2']);
         print("<div class='data-item'>");
         print("<a href='$doc_url'>".$doc['title']."</a>");
-        print progress_bar('success',$vnow,$vmin,$vmax,$vnow);
+        print progress_bar('success',$vnow,0,1.4,$vnow);
         print("</div>");
     }
     ?>

@@ -12,7 +12,9 @@ class Topic extends CI_Controller {
     public function all() 
     {
         #$this->output->cache(self::CACHE);
-        
+    	$this->load->library('SVGGraphWrapper',array(),'graph');
+		$data['graph'] = $this->graph;
+        $data['trends'] = $this->topic->get_topic_trends();
         $data['topics'] = $this->topic->get_list();
         $data['page_title'] = 'All Topics';
         $data['topic_entropy'] = $this->topic->get_topic_entropy();
@@ -52,10 +54,14 @@ class Topic extends CI_Controller {
     
     public function item($topic_id = NULL) 
     {
+    	$this->load->library('SVGGraphWrapper',array(),'graph');
+		$data['graph'] = $this->graph;
+		
         #$this->output->cache(self::CACHE);
         $data['page_title'] = "Topic $topic_id";
         $data['topic_id'] = $topic_id;
         $data['topic_info'] = $this->topic->get_item($topic_id);
+	  	$data['js_div_ends'] = $this->topic->get_js_div_ends();
 		$data['alpha_stats'] = $this->topic->get_alpha_stats();
         $data['words'] = $this->topic->get_words($topic_id) ;
         $data['max_words'] = $this->topic->get_max_words();
@@ -63,6 +69,7 @@ class Topic extends CI_Controller {
         $data['doc_count'] = $this->topic->get_doc_count_for_topic($topic_id);
         $data['docs'] = $this->topic->get_docs($topic_id);
         $data['topics'] = $this->topic->get_topics($topic_id);
+		$data['trend'] = $this->topic->get_topic_trend($topic_id);
         $this->load->view('templates/header.php', $data);
         $this->load->view('topic_item', $data); 
         $this->load->view('templates/footer.php', $data);
@@ -74,6 +81,8 @@ class Topic extends CI_Controller {
 	  $data['max_words'] = $this->topic->get_max_words();
 	  $data['common_docs'] = $this->topic->get_common_docs($topic_id_x,$topic_id_y);
 	  $data['common_words'] = $this->topic->get_common_words($topic_id_x,$topic_id_y);
+	  $data['js_div_ends'] = $this->topic->get_js_div_ends();
+	  $data['js_div'] = $this->topic->get_js_div($topic_id_x,$topic_id_y);
 	  $data['topic_id_x'] = $topic_id_x;
 	  $data['topic_id_y'] = $topic_id_y;
 	  $data['topic_info_x'] = $this->topic->get_item($topic_id_x);
@@ -82,12 +91,12 @@ class Topic extends CI_Controller {
 	  $data['words_y'] = $this->topic->get_words($topic_id_y) ;
 	  $data['phrases_x'] = $this->topic->get_phrases($topic_id_x);
 	  $data['phrases_y'] = $this->topic->get_phrases($topic_id_y);
-	  $data['doc_count_x'] = $this->topic->get_doc_count_for_topic($topic_id_x);
-	  $data['doc_count_y'] = $this->topic->get_doc_count_for_topic($topic_id_y);
-	  $data['docs_x'] = $this->topic->get_docs($topic_id_x);
-	  $data['docs_y'] = $this->topic->get_docs($topic_id_y);
-	  $data['topics_x'] = $this->topic->get_topics($topic_id_x);
-	  $data['topics_y'] = $this->topic->get_topics($topic_id_y);
+	  #$data['doc_count_x'] = $this->topic->get_doc_count_for_topic($topic_id_x);
+	  #$data['doc_count_y'] = $this->topic->get_doc_count_for_topic($topic_id_y);
+	  #$data['docs_x'] = $this->topic->get_docs($topic_id_x);
+	  #$data['docs_y'] = $this->topic->get_docs($topic_id_y);
+	  #$data['topics_x'] = $this->topic->get_topics($topic_id_x);
+	  #$data['topics_y'] = $this->topic->get_topics($topic_id_y);
 	  $data['page_title'] = "Topic Pair $topic_id_x + $topic_id_y";
 	  $this->load->view('templates/header.php', $data);
 	  $this->load->view('topic_pair', $data); 

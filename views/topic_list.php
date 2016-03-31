@@ -2,8 +2,7 @@
 	<h1>Topics</h1>
 </div>
 
-
-<div class="col-md-6">
+<div class="col-md-7">
 	<h2>Topics by Alpha (&alpha;)</h2>
 	<div>
 		<p>The &alpha; value of a topic is a measure of the frequency with which it appears in the corpus. Topics with a
@@ -14,17 +13,22 @@
 $vmin = $alpha_stats['min'];
 $vmax = $alpha_stats['max']; 
 foreach($topics as $topic) {
+	$trend = $trends['t'.$topic['topic_id']];
+	$bg = sparkline($graph,$trend,2005,2015);
     $vnow = $topic['topic_alpha'];
 	$topic_url = base_url('topic/item/'.$topic['topic_id']);
+	$img_url = base_url("assets/images/topic_plots/t{$topic['topic_id']}.png");
 	print("<div class='data-item'>");
-	print("<p style='font-size:110%;'><a href='$topic_url'>" . $topic['topic_words'] . "</a> <span class='text-muted'><small>T-". $topic['topic_id']."</small></span></p>");
+	print("<p style='font-size:110%;'>");
+	print $bg;   
+	print("<a href='$topic_url'>" . $topic['topic_words'] . "</a> <span class='text-muted'><small>T-". $topic['topic_id']."</small></span></p>");
 	print progress_bar('success',$vnow,$vmin,$vmax,$vnow);
 	print("</div>");
 }
 ?>	
 </div>
 
-<div class="col-md-6">
+<div class="col-md-5">
 	<h2>Documents by Topic Entropy (H)</h2>
 	<div>
 		<p>Topic entropy refers to the degree to which topic weights are equally distributed in a document. In 

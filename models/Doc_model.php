@@ -64,9 +64,22 @@ class Doc_model extends CI_Model {
 	    return $values;
 	}
 	
+	function get_related_docs($doc_id)
+	{
+		$q = $this->db->query("SELECT s.title, doc_id_2, distance FROM docpair dp JOIN src_all_doi s ON(dp.doc_id_2 = s.doc_id) WHERE dp.doc_id = ? ORDER BY distance", array($doc_id));		
+		return $q->result_array();
+	}
+	
+	function get_avg_distance()
+	{
+		$q = $this->db->query("SELECT AVG(distance) as x FROM docpair");
+		$r = $q->row_array();
+		return $r['x'];
+	}
+	
 	function get_docs($doc_id,$limit=10)
 	{
-		$docs = array();
+		$docs = array();		
 		$q1 = $this->db->query("
 			SELECT d.doc_id, s.title, s.authors, s.year, d.topic_weight, d.topic_id
 			FROM doctopic_long d JOIN src_all_doi s USING(doc_id) 

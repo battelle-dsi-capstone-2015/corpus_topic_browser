@@ -13,6 +13,27 @@ class Word_model extends CI_Model {
 		return $q->result_array();
 	}
 	
+	function get_score($word_str,$ttf_min=0,$ttf_max=100000,$idf_min=0,$score_min=0)
+	{
+		
+		$q1 = $this->db->query("SELECT MAX(trendiness) as 'score_max' FROM word_stats");
+		$r1 = $q1->row_array();
+		$score_max = $r1['score_max'];
+		
+		$q2 = $this->db->query("SELECT COUNT(*) AS 'n' FROM doc");
+		$r2 = $q2->row_array(); 
+		$idf_max = $r2['n'];
+
+		#ttf = prevelance idf = specificty	
+		$q3 = $this->db->query("SELECT trendiness, ttf, idf, df
+			FROM word_stats 
+			WHERE trendiness > ? AND trendiness <= ? 
+			AND ttf > ? AND ttf <= ? 
+			AND idf > ? AND idf <= ? 
+			AND word_str = ?",array($score_min,$score_max,$ttf_min,$ttf_max,$idf_min,$idf_max,$word_str));
+		return $q3->row_array();
+	}
+	
 	function get_list_with_topics($limit=1000)
 	{
 	    $q = $this->db->query("
@@ -47,6 +68,42 @@ class Word_model extends CI_Model {
 	    $q = $this->db->query("SELECT max(word_freq) as 'n' FROM word");
 	    $r = $q->row_array();
 	    return $r['n'];
+	}
+	
+	function get_trending_words($limit = 100)
+	{
+		$q = $this->db->query("SELECT word_str, trendiness 
+			FROM word_stats
+			WHERE word_str NOT LIKE '%-%' 
+			ORDER BY trendiness DESC 
+			LIMIT $limit");
+		return $q->result_array();
+	}
+	
+	function get_trendiness($word_str)
+	{
+		$q = $this->db->query("SELECT trendiness FROM word_stats WHERE word_str = ?", array($word_str));
+		$r = $q->row_array();
+		return $r['trendiness'];
+	}
+	
+	function get_trend_distro($word_str)
+	{
+		$trend = array();
+		$q = $this->db->query("SELECT word_str, year, word_count FROM wordfreq WHERE word_str LIKE	 ?", array($word_str));
+		$rs = $q->result_array();
+		foreach ($rs as $r)
+		{
+			if (!array_key_exists($r['year'],$trend)) 
+			{
+				$trend[$r['year']] = $r['word_count'];
+			}
+			else
+			{
+				$trend[$r['year']] += $r['word_count'];
+			}
+		}
+		return $trend;
 	}
 	
 	function get_topics($word_str)
@@ -94,6 +151,6 @@ class Word_model extends CI_Model {
 		} 
 		return $docs;
 	}
-
+	
     
 }
