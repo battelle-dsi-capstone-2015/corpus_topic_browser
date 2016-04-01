@@ -7,20 +7,13 @@
 	<p>The result of a supervised machine learning algorithm.</p>
 	<?php
 	foreach($trending_words as $word) {
-		$word_str = $word['word_str'];
-		$trend_distro = $this->word->get_trend_distro($word_str);
+		#$word_str = $word['word_str'];
+		$trend_distro = $this->word->get_trend_distro($word['word_str']);
 		$bg = sparkline($graph,$trend_distro,2005,2015);
 		$trendiness = log($word['trendiness']);
-		#$img_src = "http://studio1.shanti.virginia.edu/capstone/sites/default/files/styles/medium/public/wordplots/{$word_str}.png";
-		#$img_props = array(
-	    #    'src'   => $img_src,
-	    #    'width' => '100',
-	    #    'height'=> '25'
-		#);
 		$word_url = base_url('word/item/'.$word['word_str']);
 		print "<div class='data-item'>";
 		print $bg;
-		#print img($img_props);
 		print "<a href='$word_url'>".$word['word_str']."</a>";
 		print progress_bar('success',$trendiness,0,100,number_format($trendiness));
 		print "</div>";	

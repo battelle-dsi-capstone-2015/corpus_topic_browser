@@ -118,7 +118,7 @@ if ( ! function_exists('sparkline'))
 	}
 }
 
-function graph($graph, $type, $settings = array(), $values = array(), $colors = array(), $h = 300, $w = 200)
+function draw_graph($graph, $type, $settings = array(), $values = array(), $colors = array(), $h = 300, $w = 200)
 {
 	$g = $graph->make($w,$h,$settings);
 	$g->Values($values);

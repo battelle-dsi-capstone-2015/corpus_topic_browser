@@ -73,8 +73,17 @@ class Word_model extends CI_Model {
 	function get_trending_words($limit = 100)
 	{
 		$q = $this->db->query("SELECT word_str, trendiness 
-			FROM word_stats
-			WHERE word_str NOT LIKE '%-%' 
+			FROM word_stats 
+			WHERE word_str NOT LIKE '%0%' 
+			AND word_str NOT LIKE '%1%'
+			AND word_str NOT LIKE '%2%'
+			AND word_str NOT LIKE '%3%'
+			AND word_str NOT LIKE '%4%'
+			AND word_str NOT LIKE '%5%'
+			AND word_str NOT LIKE '%6%'
+			AND word_str NOT LIKE '%7%'
+			AND word_str NOT LIKE '%8%'
+			AND word_str NOT LIKE '%9%'
 			ORDER BY trendiness DESC 
 			LIMIT $limit");
 		return $q->result_array();
@@ -87,20 +96,33 @@ class Word_model extends CI_Model {
 		return $r['trendiness'];
 	}
 	
+	function get_word_counts_by_year()
+	{
+		$counts = array();
+		$q = $this->db->query("SELECT SUM(word_count) as 'total', year FROM wordfreq GROUP BY year");
+		$rs = $q->result_array();
+		foreach($rs as $r)
+		{
+			$counts[$r['year']] = $r['total'];
+		}
+		return $counts;
+	}
+	
 	function get_trend_distro($word_str)
 	{
 		$trend = array();
-		$q = $this->db->query("SELECT word_str, year, word_count FROM wordfreq WHERE word_str LIKE	 ?", array($word_str));
+		$counts = $this->get_word_counts_by_year();
+		$q = $this->db->query("SELECT word_str, year, word_count FROM wordfreq WHERE word_str LIKE ?", array($word_str));
 		$rs = $q->result_array();
 		foreach ($rs as $r)
 		{
 			if (!array_key_exists($r['year'],$trend)) 
 			{
-				$trend[$r['year']] = $r['word_count'];
+				$trend[$r['year']] = $r['word_count'] / $counts[$r['year']];
 			}
 			else
 			{
-				$trend[$r['year']] += $r['word_count'];
+				$trend[$r['year']] += $r['word_count'] / $counts[$r['year']];
 			}
 		}
 		return $trend;

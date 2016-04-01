@@ -11,11 +11,16 @@ class Doc extends CI_Controller {
         
     public function all() 
     {
+    	$this->load->library('SVGGraphWrapper',array(),'graph');
+		$data['graph'] = $this->graph;
+		
         $this->output->cache(self::CACHE);
 		$limit = 1000;
         $data['docs'] = $this->doc->get_list($limit);
 		$data['entropy'] = $this->doc->get_topic_entropy_stats();
-        $data['page_title'] = "First 1000 Documents by Title";
+        $data['page_title'] = "Documents";
+		$data['loners'] = $this->doc->get_lonely_docs();
+		$data['connectors'] = $this->doc->get_connected_docs();
         $this->load->view('templates/header.php', $data);
         $this->load->view('doc_list', $data);   
         $this->load->view('templates/footer.php', $data);
@@ -34,7 +39,7 @@ class Doc extends CI_Controller {
         $data['topics'] = $topics;
         $data['page_title'] = 'Documents for Topic(s) ' . $topic_ids_str;
         $this->load->view('templates/header.php', $data);
-        $this->load->view('doc_list', $data);   
+        $this->load->view('doc_list_by_topic', $data);   
         $this->load->view('templates/footer.php', $data);       
     }
     

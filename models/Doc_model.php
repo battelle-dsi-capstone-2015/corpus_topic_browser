@@ -178,5 +178,27 @@ class Doc_model extends CI_Model {
 		$r = $q->row_array();
 		return $r['n'];
 	}
+	
+	function get_lonely_docs($limit = 100)
+	{
+		$q = $this->db->query("SELECT s.title as 'title', d.doc_id as 'doc_id', AVG(d.distance) as 'distance' 
+			FROM docpair d
+			JOIN src_all_doi s USING(doc_id)
+			GROUP BY d.doc_id
+			ORDER BY distance DESC
+			LIMIT $limit");
+		return $q->result_array();
+	}
     
+	function get_connected_docs($limit = 100)
+	{
+		$q = $this->db->query("SELECT s.title as 'title', d.doc_id as 'doc_id', AVG(d.distance) as 'distance' 
+			FROM docpair d
+			JOIN src_all_doi s USING(doc_id)
+			GROUP BY d.doc_id
+			ORDER BY distance 
+			LIMIT $limit");
+		return $q->result_array();
+	}
+
 }
