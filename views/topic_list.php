@@ -1,7 +1,6 @@
 <div class="page-header">
 	<h1>Topics</h1>
 </div>
-
 <div class="col-md-7">
 	<h2>Topics by Alpha (&alpha;)</h2>
 	<div>
@@ -14,7 +13,7 @@ $vmin = $alpha_stats['min'];
 $vmax = $alpha_stats['max']; 
 foreach($topics as $topic) {
 	$trend = $trends['t'.$topic['topic_id']];
-	$bg = sparkline($graph,$trend,2005,2015);
+	$bg = sparkline($trend,2005,2015);
     $vnow = $topic['topic_alpha'];
 	$topic_url = base_url('topic/item/'.$topic['topic_id']);
 	$img_url = base_url("assets/images/topic_plots/t{$topic['topic_id']}.png");

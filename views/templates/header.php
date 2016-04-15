@@ -14,6 +14,7 @@
 	<!-- JQUERY -->
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0-rc.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0-rc.1/themes/base/jquery-ui.css" />
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -94,6 +95,17 @@
 	        </li>
 	        -->
 	      </ul>
+
+			<form class="navbar-form pull-right">
+		      	<div class="row">
+	    			<select id="search-type" class="form-control">
+						<option value="topic">Topics</option>
+						<option value="doc">Documents</option>
+						<option value="word">Words</option>
+					</select>
+					<input type="text" id="search-string" size="50" class="form-control"/>
+				</fieldset>
+			</form>
 	      
 	      <!--
 	      <form class="navbar-form navbar-left" role="search">
@@ -123,7 +135,25 @@
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
+	<div class="col-md-12">
+		<div class="">
+			<!--
+			<form class="pull-left form-inline">
+		      	<fieldset class="form-group row">
+	    			<select id="search-type" class="form-control">
+						<option value="topic">Topics</option>
+						<option value="doc">Documents</option>
+						<option value="word">Words</option>
+					</select>
+					<input type="text" id="search-string" size="100" class="form-control"/>
+				</fieldset>
+			</form>
+			-->
+			<div id="search-list"></div>
+		</div>
+	</div>
     <div id="site-content">
       <?php if (isset($site_message)): ?>
       <b>Site Message</b>: <div id="site-message"><?php echo $site_message; ?></div>    
       <?php endif; ?>
+      

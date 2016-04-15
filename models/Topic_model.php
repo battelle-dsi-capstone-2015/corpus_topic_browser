@@ -192,6 +192,18 @@ class Topic_model extends CI_Model {
 			}
 		}
 		return $trends;
+	}
+	
+	function get_string($term)
+	{
+		$str = $this->db->escape('%'.$term.'%');
+		$q = $this->db->query("
+			SELECT topic_words || ' T-' || topic_id as 'label', topic_id as 'value'
+			FROM topic
+			WHERE topic_words LIKE $str
+			ORDER BY label
+		");
+  		return $q->result_array();
 	}	
 	
 }

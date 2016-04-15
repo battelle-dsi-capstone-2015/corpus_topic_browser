@@ -6,15 +6,8 @@
 	</h1>
 	</div>
 	<div class="col-md-6">
-	    <?php
-	    #$img_src = "http://studio1.shanti.virginia.edu/capstone/sites/default/files/styles/medium/public/wordplots/{$word_str}.png";
-	    #print img($img_src);
-	    ?>
 		<div>
-		<?php
-		$bg = bar_graph1($graph,$trend_distro,200,300,'YEAR','frequency',2005,2015);
-		print($bg);
-		?>
+		<?php $bg = bar_graph1($trend,300,400,'year','frequency',2005,2015); print($bg); ?>
 		</div>
 		<table class="table">
 			<tr>

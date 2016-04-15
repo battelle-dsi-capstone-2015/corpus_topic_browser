@@ -4,7 +4,10 @@
 		<div>
 		<?php
 		$p = array(); 
-		foreach($phrases as $phrase) { $p[] = $phrase['topic_phrase']; }
+		foreach($phrases as $phrase) 
+		{
+			 $p[] = $phrase['topic_phrase']; 
+		}
 		print "<small>" . implode(' | ', $p) . "</small>";
         ?>
         </div>
@@ -16,7 +19,7 @@
 	<h2>Topic Trend</h2>
 	<p>Average topic weight in documents by year</p>
     <?php 
-    $bg = bar_graph1($graph,$trend,250,350,'YEAR','avg weight',2005,2015);
+    $bg = bar_graph1($trend,250,350,'year','average weight',2005,2015);
 	print($bg);
     ?>
 	<h2>Topic <var>&alpha;</var></h2>
@@ -56,7 +59,7 @@
         print("<div class='data-item'>");
 		print progress_bar('success',$vnow,$vmin,$vmax,$label);
         print("<h4><a href='$doc_url'>".$doc['title']."</a></h4>");
-        print("<div><p><b>".$doc['year']."</b> | ". $doc['authors']."</p></div>");
+        print("<div><p><b>".$doc['year']."</b> | ".$doc['authors']."</p></div>");
         print("<div id='doc-$doc_id' class='_collapse'><p>".$doc['abstract'].'</p></div>');
         print("<span class=''><a href='http://google.com/search?q={$doc['doi']}' target='_blank'>DOI:{$doc['doi']}</a></span> ");
         print("</div>");				
@@ -80,10 +83,10 @@
     	$topic_url = base_url('topic/item/'.$this_topic_id);
     	$pair_url = base_url("topic/pair/$topic_id/$this_topic_id");
     	print("<div class='data-item'>");
-	print("<a class='label label-default' href='$pair_url'>compare</a> ");
-	print("<a href='$topic_url'>".$topic['topic_words']."</a> ");
-	print progress_bar('warning',$vnow,$vmin,$vmax,round($vnow,3));
-	print("</div>");
+		print("<a class='label label-default' href='$pair_url'>compare</a> ");
+		print("<a href='$topic_url'>".$topic['topic_words']."</a> ");
+		print progress_bar('warning',$vnow,$vmin,$vmax,round($vnow,3));
+		print("</div>");
     }
 	?>
 </div>

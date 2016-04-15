@@ -14,7 +14,7 @@
 <div class="col-md-4">
   <h2>Abstract</h2>
   <div>
-    <div>
+    <div class="lead">
       <?php print($doc['abstract']); ?>
     </div>
     <div style="margin-top:1em; margin-bottom:2rem;">

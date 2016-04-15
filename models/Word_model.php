@@ -108,7 +108,7 @@ class Word_model extends CI_Model {
 		return $counts;
 	}
 	
-	function get_trend_distro($word_str)
+	function get_trend($word_str)
 	{
 		$trend = array();
 		$counts = $this->get_word_counts_by_year();
@@ -126,6 +126,15 @@ class Word_model extends CI_Model {
 			}
 		}
 		return $trend;
+	}
+	
+	function get_trend_distro()
+	{
+		$q = $this->db->query("SELECT ROUND(trendiness,1)  as 't', COUNT(*) as 'n'
+			FROM word_stats
+			GROUP BY t
+			ORDER BY t");
+		return $q->result_array();
 	}
 	
 	function get_topics($word_str)
@@ -174,5 +183,16 @@ class Word_model extends CI_Model {
 		return $docs;
 	}
 	
+	function get_string($term)
+	{
+		$str = $this->db->escape($term.'%');
+		$q = $this->db->query("
+			SELECT DISTINCT lower(word_str) as 'label', lower(word_str) as 'value'
+			FROM word_stats
+			WHERE word_str LIKE $str
+			ORDER BY ttf, df DESC
+		");
+  		return $q->result_array();
+	}	
     
 }
