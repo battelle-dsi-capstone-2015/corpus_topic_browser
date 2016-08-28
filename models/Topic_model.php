@@ -103,7 +103,10 @@ class Topic_model extends CI_Model {
 	
 	function get_topic_entropy()
 	{
-		$q = $this->db->query("SELECT count(*) as 'n', round(topic_entropy,-2) as 'h' from doctopic group by round(topic_entropy,1) order by topic_entropy");
+		$q = $this->db->query("SELECT count(*) as 'n', round(topic_entropy,-2) as 'h' 
+			FROM doctopic 
+			GROUP BY round(topic_entropy,1) 
+			order by topic_entropy");
 		return $q->result_array();		
 	}	
  
@@ -205,5 +208,77 @@ class Topic_model extends CI_Model {
 		");
   		return $q->result_array();
 	}	
+	
+	function get_topic_dict()
+	{
+		$topics = array();
+		$q = $this->db->query("SELECT * FROM topic");
+		$rs = $q->result_array();
+		foreach ($rs as $r)
+		{
+			$topics[$r['topic_id']]['alpha'] = $r['topic_alpha'];
+			$topics[$r['topic_id']]['words'] = $r['topic_words'];
+			$words = preg_split('/\s+/',$r['topic_words']);
+			$label = 'T-' . $r['topic_id'] . ' (alpha=' . $r['topic_alpha']. ")\n" 
+				. implode(' ', array_slice($words,0,2))  . "\n" 
+				. implode(' ', array_slice($words,2,2))  . "\n" 
+				. implode(' ', array_slice($words,4,2))  . "\n" 
+				. implode(' ', array_slice($words,6));
+			$topics[$r['topic_id']]['label'] = $label;
+		}
+		return $topics;		
+	}
+	
+	
+	function get_topicnet_visdata($js_min = 0.4)
+	{
+		/*
+		$topics = array();
+		$q0 = $this->db->query("SELECT * FROM topic");
+		$rs0 = $q0->result_array();
+		foreach ($rs0 as $r)
+		{
+			$words = preg_split('/\s+/',$r['topic_words']);
+			$label = 'T-' . $r['topic_id'] . ' (alpha=' . $r['topic_alpha']. ")\n" 
+				. implode(' ', array_slice($words,0,2))  . "\n" 
+				. implode(' ', array_slice($words,2,2))  . "\n" 
+				. implode(' ', array_slice($words,4,2))  . "\n" 
+				. implode(' ', array_slice($words,6));
+			$topics[$r['topic_id']] = $label;
+		}
+		*/
+		$topics = $this->get_topic_dict();
+		
+		$nodes_tmp = array();
+		$nodes = array();
+		$edges = array();
+		$q = $this->db->query("SELECT topic_id1, topic_id2, js_div  
+			FROM topicpair
+			WHERE js_div <= ?
+			AND topic_id1 IN (SELECT topic_id FROM topic WHERE topic_alpha < 0.057 AND topic_alpha > 0.0023)
+			AND topic_id2 IN (SELECT topic_id FROM topic WHERE topic_alpha < 0.057 AND topic_alpha > 0.0023)
+			ORDER BY js_div DESC 
+			LIMIT 1000",array((real)$js_min));
+		$rs = $q->result_array();
+		foreach($rs as $r)
+		{
+			$edges[] = array(
+				'id' 	=> $r['topic_id1'] .'-'. $r['topic_id2'], 
+				'from' 	=> $r['topic_id1'], 
+				'to' 	=> $r['topic_id2'], 
+				'label' => round($r['js_div'],3), 
+				'title' => $r['js_div'], 
+				'width' => 1, //(1 - $r['js_div'])*10,
+				'color' => '#98FB98'
+			);
+			$nodes_tmp[$r['topic_id1']] = array('id' => $r['topic_id1'], '_title' => $r['topic_id1'], 'label' => $topics[$r['topic_id1']]['label']); 
+			$nodes_tmp[$r['topic_id2']] = array('id' => $r['topic_id2'], '_title' => $r['topic_id2'], 'label' => $topics[$r['topic_id2']]['label']); 
+		}
+		foreach($nodes_tmp as $id => $node)
+		{
+			$nodes[] = $node;
+		}
+		return array('nodes' => $nodes, 'edges' => $edges);
+	}
 	
 }

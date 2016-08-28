@@ -98,5 +98,15 @@ class Topic extends CI_Controller {
 	    $rows = $this->topic->get_string(urldecode($term));
     	print json_encode($rows);
 	}
+	
+	public function network($js_min = 0.465)
+	{
+		$data['js_min'] = $js_min;
+		$data['topicnet'] = $this->topic->get_topicnet_visdata($js_min);
+		$data['page_title'] = "Topic Network";
+		$this->load->view('templates/header.php', $data);
+		$this->load->view('topicnet', $data);
+		$this->load->view('templates/footer.php', $data);
+	}
           
 }

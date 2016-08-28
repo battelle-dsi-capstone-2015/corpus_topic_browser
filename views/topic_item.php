@@ -11,7 +11,6 @@
 		print "<small>" . implode(' | ', $p) . "</small>";
         ?>
         </div>
-        </div>
 	</h1>
 </div>
 

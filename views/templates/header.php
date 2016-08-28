@@ -26,9 +26,13 @@
     <script src="http://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
     
     <!-- Vis -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css">
+	<!--
     <link rel="stylesheet" href="<?php print base_url('assets/js/vis/vis.css'); ?>">
     <script src="<?php print base_url('assets/js/vis/vis.min.js'); ?>"></script>
-
+	-->
+	
     <!-- Chart JS -->
     <!--
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
